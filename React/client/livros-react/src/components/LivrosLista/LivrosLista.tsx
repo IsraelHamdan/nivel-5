@@ -9,7 +9,7 @@ const controleEditora = new ControleEditora();
 interface LinhaLivroProps {
   livro: Livro;
   excluir: (codigo: string) => void;
-  getNomeEditora: (codEditora: number) => string | undefined;
+  getNomeEditora: () => string;
 }
 
 const LinhaLivro = (props: LinhaLivroProps) => {
