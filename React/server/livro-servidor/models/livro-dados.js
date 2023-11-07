@@ -11,6 +11,7 @@ const obterLivros = async () => {
 
 const incluir = async (livro) => {
   try {
+    console.log(livro);
     const novoLivro = new Livro(livro);
     const livroSalvo = await novoLivro.save();
     return livroSalvo;

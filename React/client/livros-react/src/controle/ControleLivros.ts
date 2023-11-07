@@ -1,50 +1,83 @@
 import Livro from "../modelo/Livro";
-const livros: Array<Livro> = [
-  {
-    codigo: 1,
-    codEditora: 1,
-    titulo: "Use a cabeça: Java",
-    resumo:
-      "Use a cabeça! Java é uma experiência completa de aprendizado em programação orientada a objetos (POO) e Java",
-    autores: ["Bert Bates", "Kathy Sierra"],
-  },
-  {
-    codigo: 2,
-    codEditora: 2,
-    titulo: "Java, como Programar",
-    resumo:
-      "Milhoes de alunos e profissionais aprendem programação e desenvolvimento de software com os livros Deitel",
-    autores: ["Paul Deitel", "Harvey Deitel"],
-  },
-  {
-    codigo: 3,
-    codEditora: 3,
-    titulo: "Core Java for the Impatient",
-    resumo:
-      "Eaders familiar with Horstmann's original two-volume 'Core Java' books who are looking for a comprehensive, but, condensend, guide to al of the new features and functions of Java SE 9 will learn how these new features impac the leanguage and core libraries",
-    autores: ["Cay Horstmann"],
-  },
-];
 
-export default class ControleLivros {
-  incluir(newBook: Livro): void {
-    const codigos = livros.map((livro) => livro.codigo);
-    const newCode = Math.max(...codigos) + 1;
+const baseUrl = "http://localhpst:3030/livros";
 
-    newBook.codigo = newCode;
+interface LivroMongo {
+  codigo: string;
+  codEditora: string;
+  titulo: string;
+  resumo: string;
+  autores: string[];
+}
 
-    livros.push(newBook);
+export default class ControleLivro {
+  private baseUrl: string;
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
   }
 
-  excluir(codigoLivro: number): void {
-    const index = livros.findIndex((livro) => livro.codigo === codigoLivro);
-
-    if (index !== -1) {
-      livros.splice(index, 1);
+  async obterLivros(): Promise<Livro[]> {
+    try {
+      const res = await fetch(baseUrl);
+      const data = await res.json();
+      const livrosMongo: LivroMongo[] = data.data;
+      if (!Array.isArray(livrosMongo)) {
+        throw new Error("Dados fora do formato esperado!");
+      }
+      return livrosMongo.map((livro) =>
+        this.converterLivroParaLivroMongo(livro)
+      );
+    } catch (error) {
+      console.error(`Não foi possivel incluir o livro pois: ${error}`);
     }
+    return [];
   }
 
-  obterLivros() {
-    return livros;
+  async incluir(livro: Livro): Promise<boolean> {
+    try {
+      const livroMongo: LivroMongo = this.converterLivroMongoParaLivro(livro);
+      const res = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(livroMongo),
+      });
+      return res.ok;
+    } catch (error) {
+      console.error(`Erro ao incluir o livro: ${error}`);
+    }
+    return false;
+  }
+
+  async excluir(codigo: string): Promise<boolean> {
+    try {
+      const res = await fetch(`${baseUrl}/${codigo}`, {
+        method: "DELEETE",
+      });
+      return res.ok;
+    } catch (error) {
+      console.error(`Não foi possivel excluir o livro pois: ${error}`);
+    }
+    return false;
+  }
+
+  private converterLivroParaLivroMongo(livro: Livro): LivroMongo {
+    return {
+      codigo: livro.codigo,
+      codEditora: livro.codEditora,
+      titulo: livro.titulo,
+      resumo: livro.resumo,
+      autores: livro.autores,
+    };
+  }
+  private converterLivroMongoParaLivro(livroMongo: LivroMongo): Livro {
+    return {
+      codigo: livroMongo.codigo,
+      codEditora: livroMongo.codEditora,
+      titulo: livroMongo.titulo,
+      resumo: livroMongo.resumo,
+      autores: livroMongo.autores,
+    };
   }
 }

@@ -1,99 +1,41 @@
-import React, { useState, useEffect } from "react";
-import ControleLivros from "../../controle/ControleLivros";
+import { useState, useEffect } from "react";
+import ControleLivro from "../../controle/ControleLivros";
 import ControleEditora from "../../controle/ControleEditora";
+import Livro from "../../modelo/Livro";
 
-import "./index.css";
-
-interface Livro {
-  codigo: number;
-  titulo: string;
-  resumo: string;
-  autores: string[];
-  codEditora: number;
-}
+const controleLivros = new ControleLivro("http://localhost:3030/livros");
+const controleEditora = new ControleEditora();
 
 interface LinhaLivroProps {
   livro: Livro;
-  excluir: (codLivro: number) => void;
+  excluir: (codigo: string) => void;
+  getNomeEditora: (codEditora: number) => string | undefined;
 }
 
 const LinhaLivro = (props: LinhaLivroProps) => {
-  const controleEditora = new ControleEditora();
-  const controleLivros = new ControleLivros();
-  const nomeEditora = controleEditora.getNomeEditora(props.livro.codEditora);
+  const { livro, excluir, getNomeEditora } = props;
+  const nomeEdiora = getNomeEditora;
 
   return (
-    <tr className="flex">
+    <tr>
       <td>
-        <p>{props.livro.titulo}</p>
+        <p>{livro.titulo}</p>
+        <button
+          type="button"
+          className="btn btn-warning"
+          onClick={() => excluir(livro.codigo)}>
+          excluir
+        </button>
       </td>
-      <td>
-        <p>{props.livro.resumo}</p>
-      </td>
+      <td>{livro.resumo}</td>
+      <td>{nomeEdiora(livro.codEditora)}</td>
       <td>
         <ul>
-          {props.livro.autores.map((autor: string, index: number) => (
-            <li key={index}>{autor}</li>
-          ))}
+          {livro.autores.map((autor: string, index: number) => {
+            <li key={index}>{autor}</li>;
+          })}
         </ul>
-      </td>
-      <td className="flex-row">
-        {nomeEditora}
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => props.excluir(props.livro.codigo)}>
-          Excluir
-        </button>
       </td>
     </tr>
   );
 };
-
-const LivroLista = () => {
-  const controleLivros = new ControleLivros();
-  const [livros, setLivros] = useState<Livro[]>([]);
-  const [carregado, setCarregado] = useState<boolean>(false);
-
-  useEffect(() => {
-    const livrosDoControlador = controleLivros.obterLivros();
-    setLivros(livrosDoControlador);
-    setCarregado(true);
-  });
-
-  const excluir = (codigoLivro: number) => {
-    controleLivros.excluir(codigoLivro);
-    setCarregado(false);
-  };
-
-  return (
-    <main className="container mx-3">
-      <h1 className="my-3">Lista de Livros</h1>
-      <table id="tabela" className="table table-bordered">
-        <thead className="table-dark">
-          +
-          <tr>
-            <th id="tabela-livro_titulo" className="col-sm-2">
-              Titulo
-            </th>
-            <th id="tabela-livro_titulo" className="col-sm-4">
-              Resumo
-            </th>
-            <th id="tabela-livro_titulo" className="col-sm-3">
-              Editora
-            </th>
-            <th id="tabela-livro_titulo" className="col-sm-1">
-              Autores
-            </th>
-          </tr>
-        </thead>
-        <tbody className="table-group-divider">
-          {livros.map((livro) => (
-            <LinhaLivro key={livro.codigo} livro={livro} excluir={excluir} />
-          ))}
-        </tbody>
-      </table>
-    </main>
-  );
-};
-
-export default LivroLista;

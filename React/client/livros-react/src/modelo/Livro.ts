@@ -1,6 +1,6 @@
 export default interface Livro {
-  codigo: number;
-  codEditora: number;
+  codigo: string;
+  codEditora: string;
   titulo: string;
   resumo: string;
   autores: Array<string>;

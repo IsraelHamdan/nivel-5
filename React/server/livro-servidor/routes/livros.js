@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
 router.post("/cadastro", async (req, res) => {
   try {
     const novoLivro = req.body;
+    console.log(novoLivro);
     const livroSalvo = await livroDados.incluir(novoLivro);
     res.json(livroSalvo);
   } catch (error) {

@@ -10,6 +10,7 @@ const LivrosDados = () => {
 
   const [titulo, setTitulo] = useState<string>("");
   const [resumo, setResumo] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [autores, setAutores] = useState<string>("");
   const [codEditora, setCodEditora] = useState<number>(0);
 
@@ -48,7 +49,7 @@ const LivrosDados = () => {
   };
 
   return (
-    <main className="container tab-content">
+    <main className="container-xxl tab-content">
       <h1>Dados do livro</h1>
       <form onSubmit={incluir}>
         <div>
