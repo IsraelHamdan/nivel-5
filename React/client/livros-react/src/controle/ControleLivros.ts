@@ -1,83 +1,74 @@
 import Livro from "../modelo/Livro";
 
-const baseUrl = "http://localhpst:3030/livros";
+const baseUrl = "https://localhost:3030/livros";
 
 interface LivroMongo {
-  codigo: string;
-  codEditora: string;
+  _id: number | null;
+  codEditora: number;
   titulo: string;
   resumo: string;
   autores: string[];
 }
 
-export default class ControleLivro {
-  private baseUrl: string;
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
-  }
-
+export default class ControleLivros {
   async obterLivros(): Promise<Livro[]> {
     try {
-      const res = await fetch(baseUrl);
-      const data = await res.json();
-      const livrosMongo: LivroMongo[] = data.data;
-      if (!Array.isArray(livrosMongo)) {
-        throw new Error("Dados fora do formato esperado!");
+      const res = await fetch(baseUrl, { method: "GET" });
+      if (res.ok) {
+        const livrosMongo: LivroMongo[] = await res.json();
+
+        const livros: Livro[] = livrosMongo.map((livroMongo: LivroMongo) => ({
+          codigo: String(livroMongo._id),
+          codEditora: Number(livroMongo.codEditora),
+          titulo: livroMongo.titulo,
+          resumo: livroMongo.resumo,
+          autores: livroMongo.autores,
+        }));
+
+        return livros;
       }
-      return livrosMongo.map((livro) =>
-        this.converterLivroParaLivroMongo(livro)
-      );
     } catch (error) {
-      console.error(`Não foi possivel incluir o livro pois: ${error}`);
+      console.error(error);
     }
     return [];
   }
 
+  async excluir(codigo: number): Promise<boolean> {
+    try {
+      const res = await fetch(`${baseUrl}/${codigo}`);
+      if (res.ok) {
+        const result = await res.json();
+        return result.ok === 1;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  }
+
   async incluir(livro: Livro): Promise<boolean> {
-    try {
-      const livroMongo: LivroMongo = this.converterLivroMongoParaLivro(livro);
-      const res = await fetch(baseUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(livroMongo),
-      });
-      return res.ok;
-    } catch (error) {
-      console.error(`Erro ao incluir o livro: ${error}`);
-    }
-    return false;
-  }
-
-  async excluir(codigo: string): Promise<boolean> {
-    try {
-      const res = await fetch(`${baseUrl}/${codigo}`, {
-        method: "DELEETE",
-      });
-      return res.ok;
-    } catch (error) {
-      console.error(`Não foi possivel excluir o livro pois: ${error}`);
-    }
-    return false;
-  }
-
-  private converterLivroParaLivroMongo(livro: Livro): LivroMongo {
-    return {
-      codigo: livro.codigo,
-      codEditora: livro.codEditora,
+    const livroMongo: LivroMongo = {
+      _id: Number(livro.codigo),
+      codEditora: Number(livro.codEditora),
       titulo: livro.titulo,
       resumo: livro.resumo,
       autores: livro.autores,
     };
-  }
-  private converterLivroMongoParaLivro(livroMongo: LivroMongo): Livro {
-    return {
-      codigo: livroMongo.codigo,
-      codEditora: livroMongo.codEditora,
-      titulo: livroMongo.titulo,
-      resumo: livroMongo.resumo,
-      autores: livroMongo.autores,
+
+    const reqOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(livroMongo),
     };
+    const res = await fetch(baseUrl, reqOptions);
+    if (res.ok) {
+      const result = await res.json();
+      return result.ok === 1;
+    }
+    return false;
   }
 }

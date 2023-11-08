@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import ControleEditora from "../../controle/ControleEditora";
 import ControleLivros from "../../controle/ControleLivros";
 
-const LivrosDados = () => {
+const LivroDados = () => {
   const controleLivros = new ControleLivros();
   const controleEditora = new ControleEditora();
   const navigate = useNavigate();
@@ -12,8 +14,7 @@ const LivrosDados = () => {
   const [resumo, setResumo] = useState<string>("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [autores, setAutores] = useState<string>("");
-  const [codEditora, setCodEditora] = useState<number>(0);
-
+  const [codEditora, setCodEditora] = useState<string>("");
   const [opcoes, setOpcoes] = useState<Array<{ value: number; text: string }>>(
     []
   );
@@ -28,33 +29,31 @@ const LivrosDados = () => {
   }, [controleEditora]);
 
   const tratarCombo = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectValue = Number(event.target.value);
+    const selectValue = event.target.value;
     setCodEditora(selectValue);
   };
 
   const incluir = (event: React.FormEvent) => {
     event.preventDefault();
-
     const autoresArray = autores.split("\n").map((autor) => autor.trim());
 
     const newBook = {
-      codigo: 0,
+      codigo: "",
       titulo: titulo,
       resumo: resumo,
       autores: autoresArray,
-      codEditora: codEditora,
+      codEditora: Number(codEditora),
     };
     controleLivros.incluir(newBook);
-    navigate("/");
   };
 
   return (
-    <main className="container-xxl tab-content">
-      <h1>Dados do livro</h1>
+    <section className="container-xxl tab-content">
+      <h1 className="h1">Cadastro de Livros</h1>
       <form onSubmit={incluir}>
         <div>
-          <label className="form-label" htmlFor="titulo">
-            Titulo:
+          <label className="form-label" htmlFor="titlo">
+            Titulo
           </label>
           <input
             type="text"
@@ -64,25 +63,24 @@ const LivrosDados = () => {
           />
         </div>
         <div>
-          <label className="form-label" htmlFor="resumo">
+          <label htmlFor="resumo" className="form-label">
             Resumo
           </label>
           <textarea
             id="resumo"
+            className="form-control"
             value={resumo}
-            onChange={(e) => setResumo(e.target.value)}>
-            Resumo
-          </textarea>
+            onChange={(e) => setResumo(e.target.value)}></textarea>
         </div>
         <div>
-          <label className="form-label" htmlFor="editora">
+          <label htmlFor="editora" className="form-label">
             Editora
           </label>
           <select
             id="editora"
+            className="form-control mb-2"
             value={codEditora}
-            onChange={tratarCombo}
-            className="form-control mb-2">
+            onChange={tratarCombo}>
             {opcoes.map((opcao) => (
               <option key={opcao.value} value={opcao.value}>
                 {opcao.value}
@@ -90,9 +88,10 @@ const LivrosDados = () => {
             ))}
           </select>
         </div>
+        <button type="submit">Incluir</button>
       </form>
-    </main>
+    </section>
   );
 };
 
-export default LivrosDados;
+export default LivroDados;

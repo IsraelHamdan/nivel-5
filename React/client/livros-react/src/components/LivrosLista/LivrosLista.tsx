@@ -1,41 +1,65 @@
 import { useState, useEffect } from "react";
-import ControleLivro from "../../controle/ControleLivros";
-import ControleEditora from "../../controle/ControleEditora";
-import Livro from "../../modelo/Livro";
+import ControleLivros from "../../controle/ControleLivros";
 
-const controleLivros = new ControleLivro("http://localhost:3030/livros");
-const controleEditora = new ControleEditora();
+import LinhaLivro from "./LinhaLivro";
 
-interface LinhaLivroProps {
-  livro: Livro;
-  excluir: (codigo: string) => void;
-  getNomeEditora: () => string;
+import "./index.css";
+
+interface Livro {
+  codigo: string;
+  codEditora: number;
+  titulo: string;
+  resumo: string;
+  autores: string[];
 }
 
-const LinhaLivro = (props: LinhaLivroProps) => {
-  const { livro, excluir, getNomeEditora } = props;
-  const nomeEdiora = getNomeEditora;
+const LivroLista = () => {
+  const controleLivros = new ControleLivros();
+  const [livros, setLivros] = useState<Livro[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [carregado, setCarregado] = useState<boolean>(false);
+
+  useEffect(() => {
+    controleLivros.obterLivros().then((livrosdoControlador) => {
+      setLivros(livrosdoControlador);
+      setCarregado(true);
+    });
+  });
+
+  const excluir = (codigoLivro: number) => {
+    controleLivros.excluir(codigoLivro).then(() => {
+      setCarregado(false);
+    });
+  };
 
   return (
-    <tr>
-      <td>
-        <p>{livro.titulo}</p>
-        <button
-          type="button"
-          className="btn btn-warning"
-          onClick={() => excluir(livro.codigo)}>
-          excluir
-        </button>
-      </td>
-      <td>{livro.resumo}</td>
-      <td>{nomeEdiora(livro.codEditora)}</td>
-      <td>
-        <ul>
-          {livro.autores.map((autor: string, index: number) => {
-            <li key={index}>{autor}</li>;
-          })}
-        </ul>
-      </td>
-    </tr>
+    <main className="container-xxl">
+      <h1 className="h1 my-3">Tabel de LivroLista</h1>
+      <table id="tabela" className="table table-borded">
+        <thead className="table-dark">
+          <tr>
+            <th id="tabela-livro_titulo" className="col-sm-2">
+              Titulo
+            </th>
+            <th id="tabela-livro_titulo" className="col-sm-4">
+              Resumo
+            </th>
+            <th id="tabela-livro_titulo" className="col-sm-3">
+              Autores
+            </th>
+            <th id="tabela-livro_titulo" className="col-sm-1">
+              Editora
+            </th>
+          </tr>
+        </thead>
+        <tbody className="table-group-divider">
+          {livros.map((livro) => (
+            <LinhaLivro key={livro.codigo} livro={livro} excluir={excluir} />
+          ))}
+        </tbody>
+      </table>
+    </main>
   );
 };
+
+export default LivroLista;
