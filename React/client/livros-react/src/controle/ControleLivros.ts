@@ -1,6 +1,6 @@
 import Livro from "../modelo/Livro";
 
-const baseUrl = "https://localhost:3030/livros";
+const baseUrl = "http://localhost:3030/livros";
 
 interface LivroMongo {
   _id: number | null;
@@ -35,7 +35,7 @@ export default class ControleLivros {
 
   async excluir(codigo: number): Promise<boolean> {
     try {
-      const res = await fetch(`${baseUrl}/${codigo}`);
+      const res = await fetch(`${baseUrl}/${codigo}`, { method: "DELETE" });
       if (res.ok) {
         const result = await res.json();
         return result.ok === 1;
@@ -64,7 +64,7 @@ export default class ControleLivros {
       },
       body: JSON.stringify(livroMongo),
     };
-    const res = await fetch(baseUrl, reqOptions);
+    const res = await fetch(baseUrl + "/cadastro", reqOptions);
     if (res.ok) {
       const result = await res.json();
       return result.ok === 1;

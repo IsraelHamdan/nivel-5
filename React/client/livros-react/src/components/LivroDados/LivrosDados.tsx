@@ -45,6 +45,7 @@ const LivroDados = () => {
       codEditora: Number(codEditora),
     };
     controleLivros.incluir(newBook);
+    navigate("/");
   };
 
   return (
@@ -56,6 +57,7 @@ const LivroDados = () => {
             Titulo
           </label>
           <input
+            className="form-control"
             type="text"
             id="titulo"
             value={titulo}
@@ -88,7 +90,9 @@ const LivroDados = () => {
             ))}
           </select>
         </div>
-        <button type="submit">Incluir</button>
+        <button className="btn btn-outline-success" type="submit">
+          Incluir
+        </button>
       </form>
     </section>
   );
