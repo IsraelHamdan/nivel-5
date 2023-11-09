@@ -1,24 +1,19 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+const banco = require("mongoose");
 
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 };
 
-const mongoUri = process.env.MONGO_URI;
+const mongoUrl = "mongodb://0.0.0.0:27017/";
 
-try {
-  mongoose
-    .connect(mongoUri, options)
-    .then(() => {
-      console.log("Conexão realizada!");
-    })
-    .catch((error) => {
-      console.error(`Erro na conexão com o banco: ${error}`);
-    });
-} catch (error) {
-  console.error(`Erro na conexão com o banco: ${error}`);
-}
+banco
+  .connect(mongoUrl, options)
+  .then(() => {
+    console.log("Conexão realizada com sucesso");
+  })
+  .catch((e) => {
+    console.error(`Erro na conexão com o db: ${e}`);
+  });
 
-module.exports = mongoose;
+module.exports = banco;

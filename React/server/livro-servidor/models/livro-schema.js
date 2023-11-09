@@ -1,15 +1,14 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const banco = require("./conexao");
-require("dotenv").config();
 
-const LivroSchema = new banco.Schema({
-  _id: banco.Schema.Types.ObjectId,
-  titulo: String,
+const LivroSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   codEditora: Number,
+  titulo: String,
   resumo: String,
   autores: [String],
 });
 
-const Livro = mongoose.model("livro", LivroSchema);
+const Livro = banco.model("Livro", LivroSchema);
 
 module.exports = Livro;
