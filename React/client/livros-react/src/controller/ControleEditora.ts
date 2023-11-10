@@ -1,4 +1,4 @@
-import Editora from "../modelo/Editora";
+import Editora from "../model/Editora";
 
 const editoras: Array<Editora> = [
   {

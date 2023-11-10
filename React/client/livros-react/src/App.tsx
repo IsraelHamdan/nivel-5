@@ -12,7 +12,7 @@ export default function App() {
         <Route path="/" element={<LivrosLista />} />
         <Route path="dados" element={<LivrosDados />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }

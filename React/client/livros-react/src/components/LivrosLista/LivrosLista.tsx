@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ControleLivros from "../../controle/ControleLivros";
+import ControleLivros from "../../controller/ControleLivros";
 
 import LinhaLivro from "./LinhaLivro";
 

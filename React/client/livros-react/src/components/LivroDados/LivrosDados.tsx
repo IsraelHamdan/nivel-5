@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import ControleEditora from "../../controle/ControleEditora";
-import ControleLivros from "../../controle/ControleLivros";
+import ControleEditora from "../../controller/ControleEditora";
+import ControleLivros from "../../controller/ControleLivros";
 
 const LivroDados = () => {
   const controleLivros = new ControleLivros();
@@ -20,12 +20,16 @@ const LivroDados = () => {
   );
 
   useEffect(() => {
-    const editoras = controleEditora.getEditoras();
-    const opcoesMapeadas = editoras.map((editora) => ({
-      value: editora.codEditora,
-      text: editora.nome,
-    }));
-    setOpcoes(opcoesMapeadas);
+    const getEditoras = async () => {
+      const editoras = controleEditora.getEditoras();
+
+      const opcoesMapeadas = editoras.map((editora) => ({
+        value: editora.codEditora,
+        text: editora.nome,
+      }));
+      setOpcoes(opcoesMapeadas);
+    };
+    getEditoras();
   }, [controleEditora]);
 
   const tratarCombo = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -85,10 +89,22 @@ const LivroDados = () => {
             onChange={tratarCombo}>
             {opcoes.map((opcao) => (
               <option key={opcao.value} value={opcao.value}>
-                {opcao.value}
+                {opcao.text}
               </option>
             ))}
           </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="autores" className="form-label">
+            Autores
+          </label>
+          <input
+            id="autores"
+            value={autores}
+            type="text"
+            className="form-control"
+            onChange={(e) => setAutores(e.target.value)}
+          />
         </div>
         <button className="btn btn-outline-success" type="submit">
           Incluir

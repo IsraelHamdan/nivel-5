@@ -1,4 +1,4 @@
-import ControleEditora from "../../controle/ControleEditora";
+import ControleEditora from "../../controller/ControleEditora";
 
 import "./index.css";
 
