@@ -11,25 +11,25 @@ interface LivroMongo {
 }
 
 export default class ControleLivros {
-  private livroMongoParaLivro(livroMongo: LivroMongo): Livro {
-    return {
-      codigo: livroMongo._id,
-      codEditora: livroMongo.codEditora,
-      titulo: livroMongo.titulo,
-      resumo: livroMongo.resumo,
-      autores: livroMongo.autores,
-    };
-  }
+  // private livroMongoParaLivro(livroMongo: LivroMongo): Livro {
+  //   return {
+  //     codigo: livroMongo._id,
+  //     codEditora: livroMongo.codEditora,
+  //     titulo: livroMongo.titulo,
+  //     resumo: livroMongo.resumo,
+  //     autores: livroMongo.autores,
+  //   };
+  // }
 
-  private livroParaLivroMongo(livro: Livro): LivroMongo {
-    return {
-      _id: livro.codigo,
-      codEditora: livro.codEditora,
-      titulo: livro.titulo,
-      resumo: livro.resumo,
-      autores: livro.autores,
-    };
-  }
+  // private livroParaLivroMongo(livro: Livro): LivroMongo {
+  //   return {
+  //     _id: livro.codigo,
+  //     codEditora: livro.codEditora,
+  //     titulo: livro.titulo,
+  //     resumo: livro.resumo,
+  //     autores: livro.autores,
+  //   };
+  // }
 
   async obterLivros(): Promise<LivroMongo[]> {
     const reqOptions = {
@@ -44,8 +44,14 @@ export default class ControleLivros {
         throw new Error("Erro ao obter livros");
       }
       const livrosJson = await res.json();
-      const livros: LivroMongo[] = livrosJson.map((livroMongo: LivroMongo) => {
-        return this.livroParaLivroMongo(livroMongo);
+      const livros: LivroMongo[] = livrosJson.map((livro: LivroMongo) => {
+        return {
+          codigo: livro._id || "",
+          codEditora: livro.codEditora,
+          titulo: livro.titulo,
+          resumo: livro.resumo,
+          autores: livro.autores,
+        };
       });
       return livros;
     } catch (error) {
