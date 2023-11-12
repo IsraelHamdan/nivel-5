@@ -13,6 +13,14 @@ interface Livro {
   autores: string[];
 }
 
+interface LivroMongo {
+  _id: string | null;
+  codEditora: number;
+  titulo: string;
+  resumo: string;
+  autores: string[];
+}
+
 const LivroLista = () => {
   const controleLivros = new ControleLivros();
   const [livros, setLivros] = useState<Livro[]>([]);
@@ -20,9 +28,8 @@ const LivroLista = () => {
   const [carregado, setCarregado] = useState<boolean>(false);
 
   useEffect(() => {
-    controleLivros.obterLivros().then((livrosdoControlador) => {
-      setLivros(livrosdoControlador);
-      setCarregado(true);
+    controleLivros.obterLivros().then((livrosDoControlador) => {
+      console.log("Foi chamado", livrosDoControlador);
     });
   });
 

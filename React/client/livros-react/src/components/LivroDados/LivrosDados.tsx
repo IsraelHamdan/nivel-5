@@ -22,7 +22,6 @@ const LivroDados = () => {
   useEffect(() => {
     const getEditoras = async () => {
       const editoras = controleEditora.getEditoras();
-
       const opcoesMapeadas = editoras.map((editora) => ({
         value: editora.codEditora,
         text: editora.nome,
@@ -30,7 +29,7 @@ const LivroDados = () => {
       setOpcoes(opcoesMapeadas);
     };
     getEditoras();
-  }, [controleEditora]);
+  });
 
   const tratarCombo = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectValue = event.target.value;
