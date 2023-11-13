@@ -1,20 +1,13 @@
-import { useState, useEffect } from "react";
-import ControleLivros from "../../controller/ControleLivros";
-
-import LinhaLivro from "./LinhaLivro";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+import ControleLivro from "../../controller/ControleLivros";
+import { useEffect, useState } from "react";
 
 import "./index.css";
+import LinhaLivro from "./LinhaLivro";
 
 interface Livro {
-  codigo: string;
-  codEditora: number;
-  titulo: string;
-  resumo: string;
-  autores: string[];
-}
-
-interface LivroMongo {
-  _id: string | null;
+  codigo: string | null;
   codEditora: number;
   titulo: string;
   resumo: string;
@@ -22,42 +15,43 @@ interface LivroMongo {
 }
 
 const LivroLista = () => {
-  const controleLivros = new ControleLivros();
   const [livros, setLivros] = useState<Livro[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [carregado, setCarregado] = useState<boolean>(false);
+  const controleLivros = new ControleLivro();
 
   useEffect(() => {
-    controleLivros.obterLivros().then((livrosDoControlador) => {
-      console.log("Foi chamado", livrosDoControlador);
-    });
-  });
+    const obterLivros = async () => {
+      try {
+        const livrosData = await controleLivros.obterLivros();
+        setLivros(livrosData);
+        setCarregado(true);
+      } catch (error) {
+        throw new Error(`Erro ${error} ao obter livros`);
+      }
+    };
+    obterLivros();
+  }, [controleLivros]);
 
-  const excluir = (codigoLivro: number) => {
-    controleLivros.excluir(codigoLivro).then(() => {
-      setCarregado(false);
-    });
+  const excluir = async (codigo: string) => {
+    try {
+      const excluido = await controleLivros.excluir(codigo);
+      if (excluido) {
+        const livrosAtuais = livros.filter((livro) => livro.codigo !== codigo);
+        setLivros(livrosAtuais);
+      }
+    } catch (error) {
+      throw new Error(`Erro ${error} ao excluir o livro`);
+    }
   };
-
   return (
-    <main className="container-xxl">
-      <h1 className="h1 my-3">Tabel de LivroLista</h1>
-      <table id="tabela" className="table table-borded">
+    <div className="container-xxl mx-3">
+      <h1 className="h1">Catalogo de Livros disponiveis</h1>
+      <table className="table-borded">
         <thead className="table-dark">
-          <tr>
-            <th id="tabela-livro_titulo" className="col-sm-2">
-              Titulo
-            </th>
-            <th id="tabela-livro_titulo" className="col-sm-4">
-              Resumo
-            </th>
-            <th id="tabela-livro_titulo" className="col-sm-3">
-              Autores
-            </th>
-            <th id="tabela-livro_titulo" className="col-sm-1">
-              Editora
-            </th>
-          </tr>
+          <tr className="col-sm-2">Titulo</tr>
+          <tr className="col-sm-4">Resumo</tr>
+          <tr className="col-sm-3">Autores</tr>
+          <tr className="col-sm-1">Editora</tr>
         </thead>
         <tbody className="table-group-divider">
           {livros.map((livro) => (
@@ -65,7 +59,7 @@ const LivroLista = () => {
           ))}
         </tbody>
       </table>
-    </main>
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ import ControleEditora from "../../controller/ControleEditora";
 import "./index.css";
 
 interface Livro {
-  codigo: string;
+  codigo: string | null;
   titulo: string;
   resumo: string;
   autores: string[];
@@ -12,7 +12,7 @@ interface Livro {
 
 interface LinhaLivroProps {
   livro: Livro;
-  excluir: (codLivro: number) => void;
+  excluir: (codigo: string) => void;
 }
 
 const LinhaLivro = (props: LinhaLivroProps) => {
@@ -38,7 +38,11 @@ const LinhaLivro = (props: LinhaLivroProps) => {
         {nomeEditora}
         <button
           className="btn btn-danger btn-sm"
-          onClick={() => props.excluir(Number(props.livro.codigo))}>
+          onClick={() => {
+            if (props.livro.codigo !== null) {
+              props.excluir(props.livro.codigo);
+            }
+          }}>
           Excluir
         </button>
       </td>
