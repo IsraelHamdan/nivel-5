@@ -7,7 +7,9 @@ router.get("/", async (req, res) => {
     const livros = req.body;
     const livrosObtidosDoDb = await livroDAO.obterLivros(livros);
     if (livrosObtidosDoDb) {
-      res.status(200).json({ message: "Livros obtidos do DB" });
+      res
+        .status(200)
+        .json({ message: "Livros obtidos do DB", livros: livrosObtidosDoDb });
       console.log("livros obtidos DB");
     }
   } catch (err) {
@@ -19,6 +21,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const livro = req.body;
+    console.log("🚀 ~ file: livro.js:22 ~ router.post ~ livro:", livro);
     const livroIncluidoNoDB = await livroDAO.incluir(livro);
     if (livroIncluidoNoDB) {
       res.json({ message: "Livro incluido com sucesso!" });

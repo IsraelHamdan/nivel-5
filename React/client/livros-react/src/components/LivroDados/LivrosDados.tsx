@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import ControleEditora from "../../controller/ControleEditora";
 import ControleLivros from "../../controller/ControleLivros";
+import Livro from "../../model/Livro";
 
 const LivroDados = () => {
   const controleLivros = new ControleLivros();
@@ -36,21 +37,20 @@ const LivroDados = () => {
     setCodEditora(selectValue);
   };
 
-  const incluir = (event: React.FormEvent) => {
-    event.preventDefault();
-    const autoresArray = autores.split("\n").map((autor) => autor.trim());
+  const incluir = (evento: React.FormEvent) => {
+    evento.preventDefault();
 
-    const newBook = {
-      codigo: "",
+    const novoLivro: Livro = {
+      _id: null,
+      codEditora: parseInt(codEditora),
       titulo: titulo,
       resumo: resumo,
-      autores: autoresArray,
-      codEditora: Number(codEditora),
+      autores: autores.split("\n"),
     };
-    controleLivros.incluir(newBook);
-    navigate("/");
+    controleLivros.incluir(novoLivro).then(() => {
+      navigate("/");
+    });
   };
-
   return (
     <section className="container-xxl tab-content">
       <h1 className="h1">Cadastro de Livros</h1>

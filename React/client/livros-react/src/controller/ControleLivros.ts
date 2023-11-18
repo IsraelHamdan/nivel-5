@@ -3,86 +3,80 @@ import Livro from "../model/Livro";
 const baseUrl = "http://localhost:3030/livros";
 
 interface LivroMongo {
-  // codigo = _id, tem que ficar assim se não da erro, não sei quanto ao nulo
-  codigo: string | null;
+  _id: string | null;
   codEditora: number;
   titulo: string;
   resumo: string;
   autores: string[];
 }
 
-export default class ControleLivro {
-  private livroMongoParaLivro(livroMongo: LivroMongo): Livro {
-    return {
-      codigo: livroMongo.codigo,
-      codEditora: livroMongo.codEditora,
-      titulo: livroMongo.titulo,
-      resumo: livroMongo.resumo,
-      autores: livroMongo.autores,
-    };
-  }
-
+export default class ControleLivros {
   private livroParaLivroMongo(livro: Livro): LivroMongo {
     return {
-      codigo: livro.codigo,
+      _id: livro._id,
       codEditora: livro.codEditora,
       titulo: livro.titulo,
       resumo: livro.resumo,
       autores: livro.autores,
     };
   }
-
+  private livroMongoParaLivro(livroMongo: LivroMongo): Livro {
+    return {
+      _id: livroMongo._id,
+      codEditora: livroMongo.codEditora,
+      titulo: livroMongo.titulo,
+      resumo: livroMongo.resumo,
+      autores: livroMongo.autores,
+    };
+  }
   async obterLivros(): Promise<Livro[]> {
     try {
-      const reqOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const res = await fetch(baseUrl, reqOptions);
-      const data = await res.json();
-      const livrosMongo: LivroMongo[] = data.data;
-      if (!Array.isArray(livrosMongo)) {
-        throw new Error(
-          "Erro ao obter os livros pois não vieram no formato esperado"
-        );
+      const reqOptions = { method: "GET" };
+      const reqLivros = await fetch(baseUrl, reqOptions);
+      const resLivos = await reqLivros.json();
+
+      const livrosData: LivroMongo[] = resLivos.data;
+
+      if (!Array.isArray(livrosData)) {
+        console.error("Os livros não vieram no formato esperado");
+        throw new Error("Os livros não vieram no formato esperado");
       }
-      return livrosMongo.map((livroMongo) =>
-        this.livroMongoParaLivro(livroMongo)
+      const livros = livrosData.map((livro: Livro) => {
+        return this.livroMongoParaLivro(livro);
+      });
+      console.log(
+        "🚀 ~ file: ControleLivros.ts:47 ~ ControleLivros ~ livros ~ livros:",
+        livros
       );
-    } catch (error) {
-      throw new Error(`Erro ${error} ao obter os livros`);
+      return livros;
+    } catch (err) {
+      console.error(`Erro ${err} na tentativa de obter os livros`);
+      throw err;
     }
   }
+
   async incluir(livro: Livro): Promise<boolean> {
     try {
-      const livroMongo: LivroMongo = this.livroParaLivroMongo(livro);
+      const livroDb: LivroMongo = this.livroParaLivroMongo(livro);
       const reqOptions = {
         method: "POST",
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(livroMongo),
+        body: JSON.stringify(livroDb),
       };
-      const res = await fetch(baseUrl, reqOptions);
-      return res.ok;
-    } catch (error) {
-      throw new Error(`Erro ${error} ao incluir o livro`);
+      const postLivros = await fetch(baseUrl, reqOptions);
+      if (postLivros.ok) {
+        console.log(
+          "🚀 ~ file: ControleLivros.ts:69 ~ ControleLivros ~ incluir ~ postLivros:",
+          postLivros
+        );
+
+        return true;
+      }
+    } catch (err) {
+      console.error(`Erro: ${err}, na tentativa de incluir o livro`);
     }
-  }
-  async excluir(codigo: string): Promise<boolean> {
-    try {
-      const reqOptions = {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const res = await fetch(`${baseUrl}/${codigo}`, reqOptions);
-      return res.ok;
-    } catch (error) {
-      throw new Error(`Erro ${error} ao excluir o livro`);
-    }
+    return false;
   }
 }

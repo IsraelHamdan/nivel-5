@@ -1,5 +1,5 @@
 export default interface Livro {
-  codigo: string | null;
+  _id: string | null;
   codEditora: number;
   titulo: string;
   resumo: string;

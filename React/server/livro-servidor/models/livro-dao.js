@@ -1,26 +1,27 @@
 const LivroModel = require("./livro-schema");
 
 const livro = new LivroModel({
-  codigo: String,
+  codigo: String | null,
   codEditora: Number,
   titulo: String,
   resumo: String,
   autores: [String],
 });
 
-const incluir = async () => {
+const incluir = async (livro) => {
   try {
-    const novoLivro = new Livro(livro);
-    const livroIncluido = await novoLivro.save();
+    const novoLivro = new LivroModel(livro);
+    console.log("🚀 ~ file: livro-dao.js:14 ~ incluir ~ novoLivro:", novoLivro);
+    const livroIncluido = await novoLivro.save(livro);
     return livroIncluido;
   } catch (err) {
-    console.error(`${err} na tentativa de incluir o livro no DB`);
+    console.error(`Erro ${err} na tentativa de incluir o livro no DB`);
   }
 };
 
 const obterLivros = async () => {
   try {
-    const livros = await Livro.find();
+    const livros = await LivroModel.find();
     return { data: livros };
   } catch (err) {
     console.error(`${err} na tentativa de obter os livros do DB`);
@@ -29,7 +30,7 @@ const obterLivros = async () => {
 
 const excluir = async (codigo) => {
   try {
-    const livroExcluido = await Livro.deleteOne({ _id: codigo });
+    const livroExcluido = await LivroModel.deleteOne({ _id: codigo });
     return livroExcluido;
   } catch (err) {
     console.error(`${err} na tentativa de excluir o livro`);
