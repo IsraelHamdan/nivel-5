@@ -1,14 +1,7 @@
 import ControleEditora from "../../controller/ControleEditora";
 
 import "./index.css";
-
-interface Livro {
-  codigo: string | null;
-  titulo: string;
-  resumo: string;
-  autores: string[];
-  codEditora: number;
-}
+import Livro from "../../model/Livro";
 
 interface LinhaLivroProps {
   livro: Livro;
@@ -39,8 +32,8 @@ const LinhaLivro = (props: LinhaLivroProps) => {
         <button
           className="btn btn-danger btn-sm"
           onClick={() => {
-            if (props.livro.codigo !== null) {
-              props.excluir(props.livro.codigo);
+            if (props.livro._id !== null) {
+              props.excluir(props.livro._id);
             }
           }}>
           Excluir

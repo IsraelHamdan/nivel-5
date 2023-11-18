@@ -79,4 +79,20 @@ export default class ControleLivros {
     }
     return false;
   }
+
+  async excluir(_id: string): Promise<boolean> {
+    try {
+      const reqOptions = { method: "DELETE" };
+      const deleteReq = await fetch(`${baseUrl}/${_id}`, reqOptions);
+
+      console.log(
+        "🚀 ~ file: ControleLivros.ts:88 ~ ControleLivros ~ excluir ~ deleteReq:",
+        deleteReq
+      );
+      return deleteReq.ok;
+    } catch (err) {
+      console.error(`Erro: ${err} na tentativa de excluir o livro`);
+      return false;
+    }
+  }
 }

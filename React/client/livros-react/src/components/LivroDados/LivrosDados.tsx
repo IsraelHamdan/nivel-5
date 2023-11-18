@@ -30,7 +30,7 @@ const LivroDados = () => {
       setOpcoes(opcoesMapeadas);
     };
     getEditoras();
-  });
+  }, [controleLivros]);
 
   const tratarCombo = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectValue = event.target.value;

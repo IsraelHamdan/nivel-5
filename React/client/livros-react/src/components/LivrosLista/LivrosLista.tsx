@@ -5,14 +5,7 @@ import { useEffect, useState } from "react";
 
 import "./index.css";
 import LinhaLivro from "./LinhaLivro";
-
-interface Livro {
-  codigo: string | null;
-  codEditora: number;
-  titulo: string;
-  resumo: string;
-  autores: string[];
-}
+import Livro from "../../model/Livro";
 
 const LivroLista = () => {
   const [livros, setLivros] = useState<Livro[]>([]);
@@ -36,7 +29,7 @@ const LivroLista = () => {
     try {
       const excluido = await controleLivros.excluir(codigo);
       if (excluido) {
-        const livrosAtuais = livros.filter((livro) => livro.codigo !== codigo);
+        const livrosAtuais = livros.filter((livro) => livro._id !== codigo);
         setLivros(livrosAtuais);
       }
     } catch (error) {
@@ -55,7 +48,7 @@ const LivroLista = () => {
         </thead>
         <tbody className="table-group-divider">
           {livros.map((livro) => (
-            <LinhaLivro key={livro.codigo} livro={livro} excluir={excluir} />
+            <LinhaLivro key={livro._id} livro={livro} excluir={excluir} />
           ))}
         </tbody>
       </table>
