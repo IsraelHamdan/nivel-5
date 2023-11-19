@@ -34,8 +34,13 @@ export default class ControleLivros {
       const reqOptions = { method: "GET" };
       const reqLivros = await fetch(baseUrl, reqOptions);
       const resLivos = await reqLivros.json();
+      console.log("Resposta completa da API:", resLivos);
 
-      const livrosData: LivroMongo[] = resLivos.data;
+      const livrosData: LivroMongo[] = resLivos.livros.data;
+      console.log(
+        "🚀 ~ file: ControleLivros.ts:43 ~ ControleLivros ~ obterLivros ~ livrosData:",
+        livrosData
+      );
 
       if (!Array.isArray(livrosData)) {
         console.error("Os livros não vieram no formato esperado");
