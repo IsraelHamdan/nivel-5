@@ -7,10 +7,11 @@ import Livro from "@/classes/modelos/Livro";
 import Head from "@/components/Head/Head";
 
 import React, { useEffect, useState } from "react";
-
-const baseURL = "http://localhost:3000/api/livros";
+import ControleLivros from "@/classes/controles/ControleLivros";
+import livros from "./api/livros";
 
 const controleEditora = new ControleEditora();
+const controleLivros = new ControleLivros();
 
 const LivroDados: NextPage = () => {
   const [opcoes, setOpcoes] = useState<{ value: number; text: string }[]>([]);
@@ -21,7 +22,7 @@ const LivroDados: NextPage = () => {
     opcoes.length > 0 ? opcoes[0].value : 0
   );
 
-  const navigate = useRouter().push;
+  const navigate = useRouter();
 
   useEffect(() => {
     const editoras = controleEditora.getEditoras();
@@ -37,29 +38,26 @@ const LivroDados: NextPage = () => {
     setCodEditora(codEditora);
   };
 
-  const incluirLivro = async (livro: Livro) => {
-    const res = await fetch(baseURL, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(livro),
-    });
-    return res.ok;
-  };
-
   const incluir = async (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault();
-    const livro: Livro = new Livro(
-      0,
-      codEditora,
-      titulo,
-      resumo,
-      autores.split("\n")
-    );
-    const incluido = await incluirLivro(livro);
-    if (incluido !== null && incluido !== undefined) {
-      navigate("/LivroLista");
+    try {
+      const livro: Livro = {
+        codEditora,
+        titulo,
+        resumo,
+        autores: autores.split("\n"),
+        _id: null,
+      };
+      controleLivros.incluir(livro).then((ok) => {
+        console.log(livro);
+        if (ok) {
+          navigate.push("/");
+        }
+      });
+    } catch (err) {
+      console.error(
+        `Erro: ${err} na tentativa do front-end de incluir o livro`
+      );
     }
   };
 

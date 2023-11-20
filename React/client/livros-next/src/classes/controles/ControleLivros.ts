@@ -1,4 +1,4 @@
-import Livro from "../model/Livro";
+import Livro from "../modelos/Livro";
 
 const baseUrl = "http://localhost:3030/livros";
 
@@ -34,13 +34,13 @@ export default class ControleLivros {
       const reqOptions = { method: "GET" };
       const reqLivros = await fetch(baseUrl, reqOptions);
       const resLivos = await reqLivros.json();
-      console.log("Resposta completa da API:", resLivos);
+      // console.log("Resposta completa da API:", resLivos);
 
       const livrosData: LivroMongo[] = resLivos.livros.data;
-      console.log(
-        "🚀 ~ file: ControleLivros.ts:43 ~ ControleLivros ~ obterLivros ~ livrosData:",
-        livrosData
-      );
+      // console.log(
+      //   "🚀 ~ file: ControleLivros.ts:43 ~ ControleLivros ~ obterLivros ~ livrosData:",
+      //   livrosData
+      // );
 
       if (!Array.isArray(livrosData)) {
         console.error("Os livros não vieram no formato esperado");
@@ -49,10 +49,10 @@ export default class ControleLivros {
       const livros = livrosData.map((livro: Livro) => {
         return this.livroMongoParaLivro(livro);
       });
-      console.log(
-        "🚀 ~ file: ControleLivros.ts:47 ~ ControleLivros ~ livros ~ livros:",
-        livros
-      );
+      // console.log(
+      //   "🚀 ~ file: ControleLivros.ts:47 ~ ControleLivros ~ livros ~ livros:",
+      //   livros
+      // );
       return livros;
     } catch (err) {
       console.error(`Erro ${err} na tentativa de obter os livros`);
@@ -72,10 +72,10 @@ export default class ControleLivros {
       };
       const postLivros = await fetch(baseUrl, reqOptions);
       if (postLivros.ok) {
-        console.log(
-          "🚀 ~ file: ControleLivros.ts:69 ~ ControleLivros ~ incluir ~ postLivros:",
-          postLivros
-        );
+        // console.log(
+        //   "🚀 ~ file: ControleLivros.ts:69 ~ ControleLivros ~ incluir ~ postLivros:",
+        //   postLivros
+        // );
 
         return true;
       }
@@ -90,10 +90,10 @@ export default class ControleLivros {
       const reqOptions = { method: "DELETE" };
       const deleteReq = await fetch(`${baseUrl}/${_id}`, reqOptions);
 
-      console.log(
-        "🚀 ~ file: ControleLivros.ts:88 ~ ControleLivros ~ excluir ~ deleteReq:",
-        deleteReq
-      );
+      // console.log(
+      //   "🚀 ~ file: ControleLivros.ts:88 ~ ControleLivros ~ excluir ~ deleteReq:",
+      //   deleteReq
+      // );
       return deleteReq.ok;
     } catch (err) {
       console.error(`Erro: ${err} na tentativa de excluir o livro`);

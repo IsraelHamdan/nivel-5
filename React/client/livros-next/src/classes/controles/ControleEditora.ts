@@ -21,7 +21,7 @@ export default class ControleEditora {
   }
 
   public getNomeEditora(codEditora: number): string | undefined {
-    console.log("Chamada getNomeEditora com código:", codEditora);
+    // console.log("Chamada getNomeEditora com código:", codEditora);
     const editoraEncontrada = editoras.find(
       (editora) => editora.codEditora === codEditora
     );
