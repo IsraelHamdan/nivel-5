@@ -8,7 +8,6 @@ import Head from "@/components/Head/Head";
 
 import React, { useEffect, useState } from "react";
 import ControleLivros from "@/classes/controles/ControleLivros";
-import livros from "./api/livros";
 
 const controleEditora = new ControleEditora();
 const controleLivros = new ControleLivros();
@@ -51,7 +50,7 @@ const LivroDados: NextPage = () => {
       controleLivros.incluir(livro).then((ok) => {
         console.log(livro);
         if (ok) {
-          navigate.push("/");
+          navigate.push("/LivroLista");
         }
       });
     } catch (err) {
