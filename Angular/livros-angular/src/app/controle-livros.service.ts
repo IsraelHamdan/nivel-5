@@ -2,74 +2,107 @@ import { Injectable } from '@angular/core';
 import { Livro } from './livro';
 import { Observable, of } from 'rxjs';
 
+const baseUrl = 'http://localhost:3030';
+
+interface LivroMongo {
+  _id: string | null;
+  codEditora: number;
+  titulo: string;
+  resumo: string;
+  autores: string[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ControleLivrosService {
-  livros: Array<Livro> = [];
-  constructor() {
-    this.livros = [
-      new Livro(
-        1,
-        1,
-        'Use a Cabeça: Java',
-        'Use a cabeça! Java é uma experiência completa de aprendizado em programação orientada a objetos (POO) e Java',
-        ['Bert Bates', 'Kathy Sierra']
-      ),
-      new Livro(
-        2,
-        2,
-        'Java, como programar',
-        'Milhões de alunos e profissionais aprendem programaçãoe desenvolvimento de software com os livros Deitel',
-        ['Paul Deitel', 'Harvey Deitel']
-      ),
-      new Livro(
-        3,
-        3,
-        'Gua prático de TypeScript',
-        'Desenvolvido e mantido pela Microsoft, o TypeScript é um pré-processador open source de códigos JavaScript que auxilia na escrita de códigos, desde os mais simples até os mais complexos, utilizando tipagem de dados e os princípios da Orientação a Objetos para o desenvolvimento de aplicações front-end, back-end e mobile',
-        ['Thiago da Silva Adriano']
-      ),
-      new Livro(
-        4,
-        1,
-        'Código Limpo: Habilidades práticas do Agile software',
-        'Clean Code é um livro mundialmente conchecido na área de programação, ele é um dos 3 livros de uma serie do Robert C Martin, os outros dois são Arquitetura Limpa e o Codificador Limpo',
-        ['Robert C Martin']
-      ),
-      new Livro(
-        5,
-        1,
-        'Arquitetura Limpa: O guia do artesão para estrutura e desing de software',
-        'As regras universais de arquitetura de software aumentam dramaticamente a produtividade dos desenvolvedores ao longo da vida dos sistemas de software. Agora, aproveitando o sucesso dos seus best-sellers "Código Limpo" e "O Codificador Limpo", o lendário artesão de software Robert C. Martin (“Uncle Bob”) vai revelar essas regras e ajudar o leitor a aplicá-las.A "Arquitetura Limpa" de Martin não é só mais um catálogo de opções',
-        ['Robert C Martin']
-      ),
-      new Livro(
-        6,
-        1,
-        'O codificador limpo: um código de conduta para programadores profissionais ',
-        'Verdadeiros profissionais praticam e trabalham firme para manter suas habilidades afiadas e prontas. Não é o bastante simplesmente fazer suas tarefas diárias e chamar isso de prática. Realizar seu trabalho diário é performance, e não prática. Prática é quando você especificamente exercita as habilidades fora do seu ambiente de trabalho com o único propósito de potencializá-las.',
-        ['Robert C Martin']
-      ),
-    ];
+  private livroParaLivroMongo(livro: Livro): LivroMongo {
+    return {
+      _id: livro._id,
+      codEditora: livro.codEditora,
+      titulo: livro.titulo,
+      resumo: livro.resumo,
+      autores: livro.autores,
+    };
   }
-  obterLivros(): Array<Livro> {
-    return this.livros;
+  private livroMongoParaLivro(livroMongo: LivroMongo): Livro {
+    return {
+      _id: livroMongo._id,
+      codEditora: livroMongo.codEditora,
+      titulo: livroMongo.titulo,
+      resumo: livroMongo.resumo,
+      autores: livroMongo.autores,
+    };
   }
-
-  incluir(novoLivro: Livro): Observable<void> {
-    const codLivros = this.livros.map((livro) => livro.codigo);
-    const maiorCodigo = Math.max(...codLivros);
-
-    novoLivro.codigo = maiorCodigo + 1;
-    this.livros.push(novoLivro);
-
-    return of(undefined);
-  }
-  excluir(codigo: number): void {
-    const index = this.livros.findIndex((livro) => livro.codigo === codigo);
-    if (index !== -1) {
-      this.livros.splice(index, 1);
+  async obterLivros(): Promise<Livro[]> {
+    try {
+      const reqOptions = {
+        method: 'GET',
+      };
+      const reqLivros = await fetch(baseUrl, reqOptions);
+      const resLivros = await reqLivros.json();
+      console.log(
+        '🚀 ~ file: controle-livros.service.ts:47 ~ ControleLivrosService ~ obterLivros ~ resLivros:',
+        resLivros
+      );
+      const livrosDados: LivroMongo[] = resLivros.livros.data;
+      console.log(
+        '🚀 ~ file: controle-livros.service.ts:52 ~ ControleLivrosService ~ obterLivros ~ livrosDados:',
+        livrosDados
+      );
+      if (!Array.isArray(livrosDados)) {
+        console.error('Os livros não vieram no formato de JSON');
+      }
+      const livros = livrosDados.map((livroMongo: LivroMongo) => {
+        return this.livroMongoParaLivro(livroMongo);
+      });
+      return livros;
+    } catch (err) {
+      console.error(`Erro: ${err} do controlador ao obter os livros`);
+      throw err;
     }
+  }
+  async incluir(livro: Livro): Promise<boolean> {
+    try {
+      const livroDb: LivroMongo = this.livroParaLivroMongo(livro);
+      const reqOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(livroDb),
+      };
+      const postLivros = await fetch(baseUrl, reqOptions);
+      console.log(
+        '🚀 ~ file: controle-livros.service.ts:79 ~ ControleLivrosService ~ incluir ~ postLivros antes da verificação:',
+        postLivros
+      );
+      if (postLivros.ok) {
+        console.log(
+          '🚀 ~ file: controle-livros.service.ts:79 ~ ControleLivrosService ~ incluir ~ postLivros depois da verificação:',
+          postLivros
+        );
+        return true;
+      }
+    } catch (err) {
+      console.error(`Erro: ${err} do controlador em incluir o ${livro}`);
+    }
+    return false;
+  }
+  async exluir(_id: string): Promise<boolean> {
+    try {
+      const reqOptions = {
+        method: 'DELETE',
+      };
+      const deleteLivro = await fetch(`${baseUrl}/${_id}`);
+      if (deleteLivro.ok) {
+        return deleteLivro.ok;
+      }
+    } catch (err) {
+      console.error(
+        `Erro: ${err} na tentativa do controlador de excluir o livro`
+      );
+    }
+    return false;
   }
 }

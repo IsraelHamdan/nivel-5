@@ -34,13 +34,8 @@ export default class ControleLivros {
       const reqOptions = { method: "GET" };
       const reqLivros = await fetch(baseUrl, reqOptions);
       const resLivos = await reqLivros.json();
-      // console.log("Resposta completa da API:", resLivos);
 
       const livrosData: LivroMongo[] = resLivos.livros.data;
-      // console.log(
-      //   "🚀 ~ file: ControleLivros.ts:43 ~ ControleLivros ~ obterLivros ~ livrosData:",
-      //   livrosData
-      // );
 
       if (!Array.isArray(livrosData)) {
         console.error("Os livros não vieram no formato esperado");
@@ -49,10 +44,6 @@ export default class ControleLivros {
       const livros = livrosData.map((livro: Livro) => {
         return this.livroMongoParaLivro(livro);
       });
-      // console.log(
-      //   "🚀 ~ file: ControleLivros.ts:47 ~ ControleLivros ~ livros ~ livros:",
-      //   livros
-      // );
       return livros;
     } catch (err) {
       console.error(`Erro ${err} na tentativa de obter os livros`);

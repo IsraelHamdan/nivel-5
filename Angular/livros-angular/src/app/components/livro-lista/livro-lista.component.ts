@@ -14,29 +14,29 @@ export class LivroListaComponent implements OnInit {
   public livros: Array<Livro> = [];
 
   constructor(
-    private servEditora: ControleEditoraService,
-    private servLivros: ControleLivrosService
+    public servEditora: ControleEditoraService,
+    public servLivros: ControleLivrosService
   ) {}
-
-  excluir = (codigo: number): void => {
-    this.excluirLivro(codigo);
-  };
-
-  private excluirLivro(codigo: number): void {
-    const index = this.livros.findIndex((livro) => livro.codigo === codigo);
-
-    if (index !== -1) {
-      this.livros.splice(index, 1);
-    }
-  }
-
-  obterNome = (codEditora: number): string => {
-    const editora = this.servEditora.getNomeEditoras(codEditora);
-    return editora ? editora : '';
-  };
 
   ngOnInit(): void {
     this.editoras = this.servEditora.getEditoras();
-    this.livros = this.servLivros.obterLivros();
+    this.servLivros.obterLivros().then((livros) => {
+      this.livros = livros;
+    });
+  }
+
+  excluir(_id: string | null): void {
+    if (_id !== null) {
+      this.servLivros.exluir(_id).then(() => {
+        this.servLivros.obterLivros().then((livros) => {
+          this.livros = livros;
+        });
+      });
+    }
+  }
+
+  obterNome(codEditora: number): string {
+    const editora = this.editoras.find((e) => e.codEditora === codEditora);
+    return editora ? editora.nome : 'Editora não encontrada';
   }
 }

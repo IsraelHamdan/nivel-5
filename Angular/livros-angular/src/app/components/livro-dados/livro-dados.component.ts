@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LivroDadosComponent implements OnInit {
   livro: Livro = {
-    codigo: 0,
+    _id: '',
     codEditora: 0,
     titulo: '',
     resumo: '',
