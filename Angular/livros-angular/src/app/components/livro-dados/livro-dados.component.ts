@@ -36,8 +36,19 @@ export class LivroDadosComponent implements OnInit {
 
   incluir = () => {
     this.livro.autores = this.autoresForm.split('\n');
-    this.servLivros.incluir(this.livro).subscribe(() => {
-      this.router.navigateByUrl('/lista');
-    });
+
+    this.servLivros
+      .incluir(this.livro)
+      .then((resultado) => {
+        if (resultado) {
+          this.router.navigateByUrl('/lista');
+        } else {
+          // Lidar com o caso em que a inclusão falhou, se necessário
+          console.error('Falha ao incluir o livro.');
+        }
+      })
+      .catch((error) => {
+        console.error(`Erro ao incluir o livro: ${error}`);
+      });
   };
 }

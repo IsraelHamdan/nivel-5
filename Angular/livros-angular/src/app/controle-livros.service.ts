@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Livro } from './livro';
 import { Observable, of } from 'rxjs';
 
-const baseUrl = 'http://localhost:3030';
+const baseUrl = 'http://localhost:3030/livros';
 
 interface LivroMongo {
   _id: string | null;
@@ -40,16 +40,11 @@ export class ControleLivrosService {
         method: 'GET',
       };
       const reqLivros = await fetch(baseUrl, reqOptions);
+
       const resLivros = await reqLivros.json();
-      console.log(
-        '🚀 ~ file: controle-livros.service.ts:47 ~ ControleLivrosService ~ obterLivros ~ resLivros:',
-        resLivros
-      );
+
       const livrosDados: LivroMongo[] = resLivros.livros.data;
-      console.log(
-        '🚀 ~ file: controle-livros.service.ts:52 ~ ControleLivrosService ~ obterLivros ~ livrosDados:',
-        livrosDados
-      );
+
       if (!Array.isArray(livrosDados)) {
         console.error('Os livros não vieram no formato de JSON');
       }
@@ -73,15 +68,8 @@ export class ControleLivrosService {
         body: JSON.stringify(livroDb),
       };
       const postLivros = await fetch(baseUrl, reqOptions);
-      console.log(
-        '🚀 ~ file: controle-livros.service.ts:79 ~ ControleLivrosService ~ incluir ~ postLivros antes da verificação:',
-        postLivros
-      );
+
       if (postLivros.ok) {
-        console.log(
-          '🚀 ~ file: controle-livros.service.ts:79 ~ ControleLivrosService ~ incluir ~ postLivros depois da verificação:',
-          postLivros
-        );
         return true;
       }
     } catch (err) {
@@ -94,7 +82,7 @@ export class ControleLivrosService {
       const reqOptions = {
         method: 'DELETE',
       };
-      const deleteLivro = await fetch(`${baseUrl}/${_id}`);
+      const deleteLivro = await fetch(`${baseUrl}/${_id}`, reqOptions);
       if (deleteLivro.ok) {
         return deleteLivro.ok;
       }

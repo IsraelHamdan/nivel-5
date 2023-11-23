@@ -9,6 +9,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { LivroDadosModule } from './components/livro-dados/livro-dados.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent],
@@ -18,6 +19,7 @@ import { LivroDadosModule } from './components/livro-dados/livro-dados.module';
     LivroListaModule,
     LivroDadosModule,
     FormsModule,
+    BrowserAnimationsModule,
   ],
   providers: [ControleEditoraService, ControleLivrosService],
   bootstrap: [AppComponent],
