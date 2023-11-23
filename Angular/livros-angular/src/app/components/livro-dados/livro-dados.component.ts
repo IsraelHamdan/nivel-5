@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LivroDadosComponent implements OnInit {
   livro: Livro = {
-    _id: '',
+    _id: null,
     codEditora: 0,
     titulo: '',
     resumo: '',
@@ -28,10 +28,6 @@ export class LivroDadosComponent implements OnInit {
 
   ngOnInit(): void {
     this.editoras = this.servEditora.getEditoras();
-    console.log(
-      '🚀 ~ file: livro-dados.component.ts:32 ~ LivroDadosComponent ~ ngOnInit ~  this.editoras :',
-      this.editoras
-    );
   }
 
   incluir = () => {

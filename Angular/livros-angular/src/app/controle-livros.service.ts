@@ -51,6 +51,11 @@ export class ControleLivrosService {
       const livros = livrosDados.map((livroMongo: LivroMongo) => {
         return this.livroMongoParaLivro(livroMongo);
       });
+      console.log(
+        '🚀 ~ file: controle-livros.service.ts:54 ~ ControleLivrosService ~ livros ~ livros:',
+        livros
+      );
+
       return livros;
     } catch (err) {
       console.error(`Erro: ${err} do controlador ao obter os livros`);
@@ -60,23 +65,32 @@ export class ControleLivrosService {
   async incluir(livro: Livro): Promise<boolean> {
     try {
       const livroDb: LivroMongo = this.livroParaLivroMongo(livro);
+      console.log(
+        '🚀 ~ file: controle-livros.service.ts:68 ~ ControleLivrosService ~ incluir ~ livroDb:',
+        livroDb
+      );
       const reqOptions = {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(livroDb),
       };
+
       const postLivros = await fetch(baseUrl, reqOptions);
 
       if (postLivros.ok) {
         return true;
+      } else {
+        console.error(`Erro ao incluir o livro. Status: ${postLivros.status}`);
       }
     } catch (err) {
       console.error(`Erro: ${err} do controlador em incluir o ${livro}`);
     }
+
     return false;
   }
+
   async exluir(_id: string): Promise<boolean> {
     try {
       const reqOptions = {
