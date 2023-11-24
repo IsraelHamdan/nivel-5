@@ -39,19 +39,23 @@ const LivroLista = () => {
   return (
     <div className="container-xxl mx-3">
       <h1 className="h1">Catalogo de Livros disponiveis</h1>
-      <table className="table-borded">
-        <thead className="table-dark">
-          <tr className="col-sm-2">Titulo</tr>
-          <tr className="col-sm-4">Resumo</tr>
-          <tr className="col-sm-3">Autores</tr>
-          <tr className="col-sm-1">Editora</tr>
-        </thead>
-        <tbody className="table-group-divider">
-          {livros.map((livro) => (
-            <LinhaLivro key={livro._id} livro={livro} excluir={excluir} />
-          ))}
-        </tbody>
-      </table>
+      <main className="flex-row">
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Título</th>
+              <th scope="col">Resumo</th>
+              <th scope="col">Autores</th>
+              <th scope="col">Editora</th>
+            </tr>
+          </thead>
+          <tbody>
+            {livros.map((livro, index) => (
+              <LinhaLivro key={index} livro={livro} excluir={excluir} />
+            ))}
+          </tbody>
+        </table>
+      </main>
     </div>
   );
 };
