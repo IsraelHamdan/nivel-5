@@ -28,7 +28,11 @@ const LinhaLivro = (props: LinhaLivroProps) => {
         </ul>
       </td>
       <td className="flex-row">
-        {nomeEditora}
+        <div>
+          <div> {nomeEditora}</div>
+        </div>
+      </td>
+      <div>
         <button
           className="btn btn-danger btn-sm"
           onClick={() => {
@@ -38,7 +42,7 @@ const LinhaLivro = (props: LinhaLivroProps) => {
           }}>
           Excluir
         </button>
-      </td>
+      </div>
     </tr>
   );
 };

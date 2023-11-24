@@ -30,17 +30,19 @@ const LinhaLivro = (props: LinhaLivroProps) => {
       <td className="flex-row">
         <div>
           <div> {nomeEditora}</div>
-          <button
-            className="btn btn-danger btn-sm"
-            onClick={() => {
-              if (props.livro._id !== null) {
-                props.excluir(props.livro._id);
-              }
-            }}>
-            Excluir
-          </button>
         </div>
       </td>
+      <div>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => {
+            if (props.livro._id !== null) {
+              props.excluir(props.livro._id);
+            }
+          }}>
+          Excluir
+        </button>
+      </div>
     </tr>
   );
 };
