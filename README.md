@@ -11,7 +11,15 @@ Primeiro, é necessário ter o Node.js instalado na maquina, de prefência que e
 - **Digite o comando cd para mudar para dentro da pasta React**
 
 - **Instalando as dependências dos projetos** angular, react e next, pra isso, é só dentro da pasta de cada um digitar o comando `npm install` ou se vc preferir `yarn install` segue a lista de prints:
-  ![proejeto React](/imagens//entrando-na-pasta-do-react.png)
+  ###### Projeto react
+  ![proejeto React](/imagens//instalando-as-dependencias%20.png)
+  ###### Projeto Next
+  ![projeto Next](/imagens//instalando-as-dependencias-do-next%20.png)
+  ###### Projeto Angular
+  ![projeto Angular](/imagens//instalando-as-dependencias-do-projeto-angular%20.png)
+  ###### Servidor Express
+  ![servidor express](/imagens//instalando-as-dependencias-do-servidor.png)
+- **Depois das dependencias instaladas para rodar cada uma das aplicações basta dentro da pasta de cada uma delas pelo terminal usar o comando `npm start` as unicas que se diferem desse comando e usam outro é o Next e o Angular, no next é só usar o comando `npm run dev` e no Angular `ng server` ou ainda `ng s`,**
 
 ## Tecnologias Utilizadas
 
@@ -89,3 +97,27 @@ Durante o desenvolvimento, algumas modificações foram necessárias para atende
 2. **Importação de Interfaces:** Realizei modificações para importar a interface `Livro` previamente construída, evitando a recriação desnecessária e promovendo um código mais limpo e modular.
 
 ## Espaço para Imagens
+
+### Projeto feito em React
+
+###### Lista de livros do projeto em React
+
+    ![lista de livros do projeto em React](/imagens/lista-de-livros-react.png)
+
+###### Página de cadastro do projeto em React
+
+    ![Página de cadastro do projeto em React](/imagens//pagina-de-cadastro-react.png)
+
+### Projeto feito em Next
+
+    ###### Lista de livros do projeto em Next
+    ![Lista de livros do projeto em Next](/imagens/pagina-de-livros-next.png)
+    ###### Página de cadastro do projeto em Next
+    ![Página de cadastro do projeto em Next](/imagens//pagina-de-cadastro-next.png)
+
+### Projeto em Angular
+
+    ###### Lista de livros do projeto em Angular
+    ![Lista de livros do projeto em Angular](/imagens/pagina-da-lista-de-livros.png)
+    ###### Página de cadastro do projeto em Angular
+    ![Página de cadastro do projeto em Angular](/imagens//pagina-de-cadastro.png)
