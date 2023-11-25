@@ -2,7 +2,7 @@
 
 ## Como instalar as dependencias do projeto e fazer ele funcionar
 
-Primeiro, é necessário ter o Node.js instalado na maquina, de prefência que ele esteja atualizado para versão mais recente (atualmente a 20.10.0 LTS, eu estou usando a versão 18.16.1 LTS). Depois de ter o [Node.js](https://nodejs.org/en) instalado na máquina e além dele pro projeto Angular é necessário ter o ![Angular CLI](https://angular.io/guide/setup-local) instalado na maquina, é só seguir o passo a passo
+Primeiro, é necessário ter o Node.js instalado na maquina, de prefência que ele esteja atualizado para versão mais recente (atualmente a 20.10.0 LTS, eu estou usando a versão 18.16.1 LTS). Depois de ter o [Node.js](https://nodejs.org/en) instalado na máquina e além dele pro projeto Angular é necessário ter o [Angular CLI](https://angular.io/guide/setup-local) instalado na maquina, é só seguir o passo a passo
 
 - **Vá até a pasta nivel-5**
   ![Pasta do projeto no explorador de arquivos](/imagens//pasta-do-projeto.png)
