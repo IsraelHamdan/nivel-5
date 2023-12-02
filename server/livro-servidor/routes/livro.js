@@ -3,6 +3,7 @@ const router = express.Router();
 const livroDAO = require("../models/livro-dao");
 
 router.get("/", async (req, res) => {
+  console.log("Consultando");
   try {
     const livros = req.body;
     const livrosObtidosDoDb = await livroDAO.obterLivros(livros);

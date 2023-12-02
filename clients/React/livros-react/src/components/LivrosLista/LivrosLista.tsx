@@ -23,7 +23,7 @@ const LivroLista = () => {
       }
     };
     obterLivros();
-  }, [controleLivros]);
+  }, []);
 
   const excluir = async (codigo: string) => {
     try {
